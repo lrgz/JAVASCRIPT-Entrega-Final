@@ -132,35 +132,18 @@ class Prestamo {
 class Cotizacion {
 
     constructor() {
-        this.cotizaciones = [];
+        this.cotizaciones;
+      
     }
 
 
-    setCotizacionDolar() {
+    setCotizacionDolar(paramCotizacion) {
 
+        //this.cotizaciones.push(paramCotizacion);
+        this.cotizaciones=paramCotizacion;
+        this.clearStorage();
+        this.saveStorage();
 
-        let cotizacion  = [];
-        let titulo,venta,compra;
-
-        fetch("https://www.dolarsi.com/api/api.php?type=valoresprincipales")
-        .then(response=> response.json())
-        .then(function(data){  
-
-            console.log(data);
-       
-            for (let i = 0; i <= 1; i++) 
-            {       
-                titulo=data[i]['casa']['nombre'];
-                compra=data[i]['casa']['compra'];
-                venta=data[i]['casa']['compra']             
-         
-                this.cotizaciones.push({ titulo: titulo, venta: venta, compra: compra})
-            }
-            this.saveStorage();
- 
-        })
-        // aca ver tema de toast
-        //.catch((err) => console.log(err));
 
     }
 
@@ -174,7 +157,7 @@ class Cotizacion {
 
 
     getDolarCotizacion() {
-        this.dolar = JSON.parse(localStorage.getItem("cotizacion"));
+        this.cotizaciones = JSON.parse(localStorage.getItem("cotizacion"));
         
     }
 }
@@ -183,54 +166,13 @@ class Cotizacion {
  * *********************** PROCESO ***********************
  */
 
+init();
 
 
-/* agrego los eventos a los botones */
-
-
-
-let btnCalcular = document.getElementById("btnCalcular");
-let btnReset = document.getElementById("btnReset");
-
-
-btnCalcular.addEventListener("click", validarForm);
-
-btnReset.addEventListener("click", resetInfo);
 
 /*cotizacion */
 
 
-    let dolar = new Cotizacion();     
-
-    dolar.setCotizacionDolar();
-
-    for (const dolar of dolar.getDolarCotizacion) {
-
-        console.log(dolar.titulo);
-    }
-/* muestro cotizacion */
-
-
-
-
-Swal.fire({
-    html:
-    `<h1>COTIZACION DOLAR </h1>
-`,
-
-     
-    icon:"info",
-   // footer:"<a href=''>IR A GOOGLE</a>",
-   // color: '#1a1a19',
-    //background: '#d1ddbe',
-    showClass:{
-        popup:'animate__animated animate__bounceInUp'
-    },
-    hideClass:{
-        popup:'animate__animated animate__hinge'
-    }
-   
-});
 
 function validarForm(evObject) {
 
@@ -243,32 +185,33 @@ function validarForm(evObject) {
     //validacion de nombre y apellido
 
     if (frm.nombreApellido.value === '' || frm.nombreApellido.value.length === 0 || !isNaN(frm.nombreApellido.value)) {
-        alert('No se ha informado un Nombre y Apelllido');
+        mensajeError('No se ha informado un Nombre y Apelllido');
         todoCorrecto = false;
     }
 
     //validacion de e-mail
     if (frm.email.value ==='' || frm.email.value.length === 0 || !isNaN(frm.email.value)) {
-        alert('No se ha informado un e-mail,o se cumple con el formato');
+        mensajeError('No se ha informado un e-mail,o se cumple con el formato');
         todoCorrecto = false;
     }
-    //alert(/^[0-9]+$/.test(frm.telefono.value));
-    //validacion de telefono
     
     if (frm.telefono.value <= 0|| isNaN(frm.telefono.value) ) {
-        alert('No se ha informado telefono');
+        mensajeError('No se ha informado telefono');
+
         todoCorrecto = false;
     }
 
     //validacion de campo sueldo
     if (frm.sueldo.value <= 0|| isNaN(frm.sueldo.value) ) {
-        alert('Se informado incorrectamente el sueldo ');
+        mensajeError('Se informado incorrectamente el sueldo ');
+
         todoCorrecto = false;
     }
     //validacion de plazo    
     if (frm.cantidadCuotas.value <= 0|| isNaN(frm.cantidadCuotas.value) ) {
-        alert('No se ha informado la cantidad de cuotas');
-        todoCorrecto.value = false;
+        mensajeError('No se ha informado la cantidad de cuotas');
+
+        todoCorrecto= false;
     }
 
 
@@ -319,4 +262,103 @@ function resetInfo() {
     planCuotas.classList.remove("listCuotasShow");
     planCuotas.classList.add("listCuotasHide");
 
+}
+
+function init(){
+
+
+    /* agrego los eventos a los botones */
+    let btnCalcular = document.getElementById("btnCalcular");
+    let btnReset = document.getElementById("btnReset");
+
+    btnCalcular.addEventListener("click", validarForm);
+
+    btnReset.addEventListener("click", resetInfo);
+
+    /*cotizacion dolar */
+    cotizacionDolar();
+}
+
+function cotizacionDolar(){
+
+    let dolar = new Cotizacion();     
+
+   
+
+        
+    let cotizacion  = [];
+    let titulo,venta,compra;
+
+    fetch("https://www.dolarsi.com/api/api.php?type=valoresprincipales")
+    .then(response=> response.json())
+    .then(function(data){  
+
+
+   
+        for (let i = 0; i <= 1; i++) 
+        {       
+            titulo=data[i]['casa']['nombre'];
+            compra=data[i]['casa']['compra'];
+            venta=data[i]['casa']['venta']             
+            
+            cotizacion.push({ titulo: titulo, venta: venta, compra: compra})
+        }
+        dolar.setCotizacionDolar(cotizacion);
+
+
+    })
+    // aca ver tema de toast
+    //.catch((err) => console.log(err));
+
+
+    dolar.getDolarCotizacion()
+
+
+    let msg= '<h1>COTIZACION DOLAR </h1>'
+
+
+    for (const dolarCotizacion of dolar.cotizaciones.cotizaciones) {
+  
+        msg= msg +`<h3>${dolarCotizacion.titulo}</h3>
+                   <p>Venta  :  ${dolarCotizacion.venta} </p>
+                   <p>Compra :  ${dolarCotizacion.compra} </p>
+                   <hr>`
+    }
+
+    
+/*     for (const coti of dolar.cotizaciones) {
+
+        console.log(coti.titulo);
+    } */
+
+Swal.fire({
+    html:
+    `${msg}`,
+    icon:"info",
+   // footer:"<a href=''>IR A GOOGLE</a>",
+   // color: '#1a1a19',
+    //background: '#d1ddbe',
+    showClass:{
+        popup:'animate__animated animate__bounceInUp'
+    },
+    hideClass:{
+        popup:'animate__animated animate__hinge'
+    }
+   
+});
+}
+
+function mensajeError(msg){
+    Toastify({
+        text: `${msg}`,
+        duration:1500,
+        gravity:"top",
+        position:"right",
+        style:{
+            fontSize:"18px",
+            fontFamily:"Verdana",
+            color:"white",
+            background:"red"
+        }
+    }).showToast();
 }
