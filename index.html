@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https:////cdn.jsdelivr.net/npm/@sweetalert2/theme-material-ui/material-ui.css" rel="stylesheet">
+
+    <script src="https:////cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+    
+    <link rel="stylesheet"  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <title>COMISION 34120 | ENTREGA FINAL</title>
+</head>
+<body>
+    <div class="form">
+        <fieldset>
+            <h1>SIMULADOR DE PRESTAMO</h1>
+            <form id="frmCliente" name="frmCliente">
+                <div>
+                    <label for="nombreApellido">Nombre y Apellido
+                        <input type="text" placeholder="Ingrese Nombre y Apellido" id="nombreApellido">
+                    </label>
+                </div>
+                <div>
+                    <label for="email">E-mail
+                        <input type="text" placeholder="Ingrese E-mail" id="email">
+                    </label>
+                </div>
+                <div>
+                    <label for="telefono">Telefono
+                        <input type="text" placeholder="Ingrese Telefono" id="telefono">
+                    </label>
+                </div>
+                <div>
+                    <label for="telefono">Sueldo
+                        <input type="text" placeholder="Ingrese sueldo" id="sueldo">
+                    </label>
+                </div>                                
+                <div>
+                    <label for="cantidadCuotas">Cantidad Cuotas
+                      <select id="cantidadCuotas">
+                        <option value="0">Selecciones una opcion</option>
+                        <option value="12">12</option>
+                        <option value="24">24</option>
+                        <option value="36">36</option>                        
+                     </select>
+                    </label>
+                </div>
+            </form>
+        <button id="btnCalcular">Calcular</button>
+        <button id="btnReset">Limpiar</button>
+        </fieldset>
+        <section id="planCuotas" name="planCuotas" class="listCuotasHide">
+            <hr>
+            <table class="tab">
+                <thead>
+                    <tr>
+                        <td>NRO</td>
+                        <td>CAPITAL</td>
+                        <td>INTERES</td>
+                        <td>IMPORTE A PAGAR</td>
+                    </tr>
+                </thead>
+                <tbody id="tab">
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td class="ft">TOTAL</td>
+                        <td id="t1"></td>
+                        <td id="t2"></td>
+                        <td id="t3"></td>
+                    </tr>
+                </tfoot>
+            </table>        
+        </section>
+
+    </div>
+    <script src="./assets/js/app.js"></script>
+</body>
+</html>
